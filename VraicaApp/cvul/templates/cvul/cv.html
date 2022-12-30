@@ -18,8 +18,15 @@
 <hr>
 
     {% if downloadready %}
-        <button type="submit" class="btn btn-primary pt-2">Download CV</button>
+        <a href="{% url 'download-cv' %}" ><button type="button" class="btn btn-primary pt-2" >Download CV</button></a>
     {% endif %}
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 {% endblock %}
