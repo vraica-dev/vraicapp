@@ -1,10 +1,15 @@
 import os
 import datetime
-from .models import CVApiKey
+from .models import CVApiKey, CVDocument
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.contrib import messages
+
+from rest_framework import viewsets
+from .serializers import CVDocSerializer
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 def home(request):
@@ -52,3 +57,26 @@ def download_cv(request):
                 os.path.basename(cv_path)
             return response
     raise Http404
+
+
+class CVViewset(viewsets.ViewSet):
+    
+    def list(self, request):
+        queryset = CVDocument.objects.all()
+        serializer = CVDocSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = CVDocument.objects.all()
+        serializer = CVDocSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+        
+
+    # def get_permissions(self):
+    #     if self.action == 'retrieve':
+    #         permission_classes = [IsAuthenticated]
+    #     else:
+    #         permission_classes = [IsAdminUser]
+    #     return [permission() for permission in permission_classes]
